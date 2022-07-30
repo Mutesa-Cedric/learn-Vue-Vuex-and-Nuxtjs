@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <Header @toggle-add-task="toggleShowAddTask" title="task tracker" />
+    <Header
+      :showAddTask="showAddTask"
+      @btn-click="toggleShowAddTask"
+      title="task tracker"
+    />
     <div v-show="showAddTask">
       <AddTask @submit-form="addTask" />
     </div>
@@ -44,33 +48,25 @@ export default {
       });
     },
     addTask(task) {
+      
       this.tasks = [...this.tasks, task];
     },
     toggleShowAddTask() {
       this.showAddTask = !this.showAddTask;
     },
+    async fetchTasks() {
+      const res = await fetch("api/tasks");
+      const data = await res.json();
+      return data;
+    },
+    async fetchTask(id) {
+      const res = await fetch(`api/tasks/${id}`);
+      const data = await res.json();
+      return data;
+    },
   },
-  created() {
-    this.tasks = [
-      {
-        id: 1,
-        text: "Doctors Appointment",
-        day: "March 1st at 2:30pm",
-        reminder: true,
-      },
-      {
-        id: 2,
-        text: "Meeting at School",
-        day: "March 3rd at 1:30pm",
-        reminder: true,
-      },
-      {
-        id: 3,
-        text: "Food  Shopping",
-        day: "March 1st at 11:00pm",
-        reminder: false,
-      },
-    ];
+  async created() {
+    this.tasks = await this.fetchTasks();
   },
 };
 </script>
