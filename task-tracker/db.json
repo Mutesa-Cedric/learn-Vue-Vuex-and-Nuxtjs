@@ -5,6 +5,18 @@
       "text": "Food shopping",
       "day": "March 7th at 2:00pm",
       "reminder": true
+    },
+    {
+      "text": "test",
+      "day": "test",
+      "reminder": true,
+      "id": "jnz0KS2"
+    },
+    {
+      "text": "goto school",
+      "day": "today",
+      "reminder": true,
+      "id": "WH6Pt7T"
     }
   ]
 }
