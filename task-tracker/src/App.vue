@@ -34,28 +34,41 @@ export default {
     };
   },
   methods: {
+    // delete task
     async deleteTask(id) {
       if (confirm("Are You sure?")) {
         const res = await fetch(`/api/tasks/${id}`, {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
-        const data = res.json();
-        // console.log(data);
-        this.tasks = await this.fetchTasks();
-        // this.tasks = this.tasks.filter((task) => task.id !== id);
+        res.status === 200
+          ? (this.tasks = this.tasks.filter((task) => task.id !== id))
+          : alert("error deleting task");
       }
     },
-    toggleReminder(id) {
-      this.tasks = this.tasks.map((task) => {
-        if (task.id === id) {
-          task.reminder = !task.reminder;
-        }
-        return task;
+
+    // toggle reminder
+    async toggleReminder(id) {
+      const res = await fetch(`/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reminder: !this.tasks.find((task) => task.id === id).reminder,
+        }),
       });
+
+      res.status === 200
+        ? (this.tasks = this.tasks.map((task) => {
+            if (task.id === id) {
+              task.reminder = !task.reminder;
+            }
+            return task;
+          }))
+        : alert("error setting reminder!");
     },
+
+    // add task
     async addTask(task) {
       const res = await fetch("api/tasks", {
         method: "POST",
@@ -64,20 +77,21 @@ export default {
         },
         body: JSON.stringify(task),
       });
-      const response = await res.json();
-      // console.log(response);
-      this.tasks = await this.fetchTasks();
-
-      // this.tasks = [...this.tasks, task];
+      const newTask = await res.json();
+      this.tasks = [...this.tasks, newTask];
     },
     toggleShowAddTask() {
       this.showAddTask = !this.showAddTask;
     },
+
+    // fetch tasks
     async fetchTasks() {
       const res = await fetch("api/tasks");
       const data = await res.json();
       return data;
     },
+
+    // fetch a single task
     async fetchTask(id) {
       const res = await fetch(`api/tasks/${id}`);
       const data = await res.json();

@@ -4,13 +4,7 @@
       "id": "3",
       "text": "Food shopping",
       "day": "March 7th at 2:00pm",
-      "reminder": false
-    },
-    {
-      "text": "test",
-      "day": "30 july",
-      "reminder": true,
-      "id": "wtQyEgG"
+      "reminder": true
     }
   ]
 }
