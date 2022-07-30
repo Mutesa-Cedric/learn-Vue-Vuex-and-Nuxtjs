@@ -34,9 +34,18 @@ export default {
     };
   },
   methods: {
-    deleteTask(id) {
+    async deleteTask(id) {
       if (confirm("Are You sure?")) {
-        this.tasks = this.tasks.filter((task) => task.id !== id);
+        const res = await fetch(`/api/tasks/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = res.json();
+        // console.log(data);
+        this.tasks = await this.fetchTasks();
+        // this.tasks = this.tasks.filter((task) => task.id !== id);
       }
     },
     toggleReminder(id) {
@@ -47,9 +56,19 @@ export default {
         return task;
       });
     },
-    addTask(task) {
-      
-      this.tasks = [...this.tasks, task];
+    async addTask(task) {
+      const res = await fetch("api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-type": "Application/json",
+        },
+        body: JSON.stringify(task),
+      });
+      const response = await res.json();
+      // console.log(response);
+      this.tasks = await this.fetchTasks();
+
+      // this.tasks = [...this.tasks, task];
     },
     toggleShowAddTask() {
       this.showAddTask = !this.showAddTask;
